@@ -5,4 +5,4 @@ Just a collection of some T6-Scripts, feel free to improve some code or use it f
 
 ### Mod Version Overview:
 
-OVK_HUD - V1.2
+OVK_HUD - V1.3
