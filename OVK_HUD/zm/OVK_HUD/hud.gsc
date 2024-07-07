@@ -4,10 +4,12 @@
 
 // ToDo:
 /*  
-    - make code scalable!!!!!!
+    - m?´=´´ake code scaleable!!!!!!
+    - remove default HUD
     
     - add maximum zombies per round counter - get_round_enemy_array();
     - add ammo counter
+    - change color at low health 
 */
 
 /*
@@ -41,7 +43,9 @@ initHUD()
 /*
     name:   drawHUD
     desc:   uses the arrays to create and draw the HUD
-    para:   HUD-Element (stores text for HUD), Counter (store current values for HUD), Maximum (store maximum values for HUD)
+    para:   - String[] HUD-Element (stores text for HUD)
+            - Int[] Counter (store current values for HUD)
+            - Int[] Maximum (store maximum values for HUD)
 */
 drawHUD( HUDElement, Counter, Maximum )
 {
@@ -64,7 +68,9 @@ drawHUD( HUDElement, Counter, Maximum )
 /*
     name:   getData
     desc:   get data and store it in array
-    para:   HUD-Element (stores text for HUD), Counter (store current values for HUD), Maximum (store maximum values for HUD)
+    para:   - String[] HUD-Element (stores text for HUD)
+            - Int[] Counter (store current values for HUD)
+            - Int[] Maximum (store maximum values for HUD)
 */
 getData( HUDElement, Counter, Maximum )
 {
@@ -73,39 +79,43 @@ getData( HUDElement, Counter, Maximum )
 
     for(;;)
     {
-        
+
+        Index = 0;
+
         // Health Counter
-        self.Counter[0] = self.health;
-        self.Maximum[0] = self.maxhealth;
+        self.Counter[Index] = self.health;
+        self.Maximum[Index] = self.maxhealth;
 
         if ( !isDefined( self.oldPlayerHealth ) )
         {
-            self.oldPlayerHealth = self.Counter[0];
-            self updateData( HUDElement, self.Counter, self.Maximum, 0 );
+            self.oldPlayerHealth = self.Counter[Index];
+            self updateData( HUDElement, self.Counter, self.Maximum, Index );
         }
         else
         {
-            if ( self.oldPlayerHealth != self.Counter[0])
+            if ( self.oldPlayerHealth != self.Counter[Index])
             {
-                self.oldPlayerHealth = self.Counter[0];
-                self updateData( HUDElement, self.Counter, self.Maximum, 0 );
+                self.oldPlayerHealth = self.Counter[Index];
+                self updateData( HUDElement, self.Counter, self.Maximum, Index );
             }
         }
 
+        Index += 1;
+
         // Zombie Counter
-        self.Counter[1] = get_current_zombie_count();
+        self.Counter[Index] = get_current_zombie_count();
 
         if ( !isDefined( self.oldZombieCount ) )
         {
-            self.oldZombieCount = self.Counter[1]; 
-            self updateData( HUDElement, self.Counter, self.Maximum, 1 );
+            self.oldZombieCount = self.Counter[Index]; 
+            self updateData( HUDElement, self.Counter, self.Maximum, Index );
         }
         else
         {
-            if ( self.oldZombieCount != self.Counter[1] )
+            if ( self.oldZombieCount != self.Counter[Index] )
             {
-                self.oldZombieCount = self.Counter[1];
-                self updateData( HUDElement, self.Counter, self.Maximum, 1 );
+                self.oldZombieCount = self.Counter[Index];
+                self updateData( HUDElement, self.Counter, self.Maximum, Index );
             }
         }
 
@@ -116,23 +126,21 @@ getData( HUDElement, Counter, Maximum )
 /*
     name:   updateData
     desc:   update menu with values stored in array
-    para:   HUD-Element (stores text for HUD), Counter (store current values for HUD), Maximum (store maximum values for HUD)
+    para:   - String[] HUD-Element (stores text for HUD)
+            - Int[] Counter (store current values for HUD)
+            - Int[] Maximum (store maximum values for HUD)
+            - Int[] ArrayIndex (point to element in array)
 */
 updateData( HUDElement, Counter, Maximum, ArrayIndex )
 {
     self endon( "disconnect" );
     level endon( "game_ended" );
 
-    switch(ArrayIndex)
+    self.prefix = "";
+
+    if ( HUDElement[ArrayIndex] != "Zombies" )
     {
-        case 0:
-            self.prefix = " / " + self.Maximum[ArrayIndex];
-            break;
-        case 1:
-            self.prefix = "";
-            break;
-        default:
-            break;
+        self.prefix = " / " + self.Maximum[ArrayIndex];
     }
 
     self.HUDElement[ArrayIndex] setText( HUDElement[ArrayIndex] + ": " + self.Counter[ArrayIndex] + self.prefix ); 

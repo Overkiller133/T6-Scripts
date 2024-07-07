@@ -1,7 +1,7 @@
 //////////////////////////////////////////
 //      OVK_HUD.gsc                     //
 //--------------------------------------//
-//		Version: 1.2		            //
+//		Version: 1.3		            //
 //		Includes: OVK_HUD\*             //
 //      Description: A custom HUD       //
 //      Features:   - Health HUD        // 
